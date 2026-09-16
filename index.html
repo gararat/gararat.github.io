@@ -365,6 +365,170 @@
       user-select: none;
     }
 
+
+    .home {
+      display: grid;
+      gap: 22px;
+    }
+
+    .home-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 42px 42px 38px;
+      border-radius: 30px;
+      color: white;
+      background: linear-gradient(122deg, var(--navy) 0%, var(--navy-2) 62%, #2158a0 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .home-hero::before,
+    .home-hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .home-hero::before {
+      width: 260px;
+      height: 260px;
+      right: -80px;
+      top: -105px;
+      border: 42px solid rgba(124, 231, 214, .14);
+    }
+
+    .home-hero::after {
+      width: 150px;
+      height: 150px;
+      left: -65px;
+      bottom: -85px;
+      background: rgba(124, 231, 214, .08);
+    }
+
+    .home-hero > * { position: relative; z-index: 1; }
+
+    .home-hero h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(1.9rem, 4.5vw, 3rem);
+      line-height: 1.08;
+    }
+
+    .home-hero p {
+      max-width: 700px;
+      margin: 15px 0 0;
+      color: #dfe8ff;
+      line-height: 1.62;
+    }
+
+    .catalog-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-top: 6px;
+    }
+
+    .catalog-head h2 { margin: 0; }
+    .catalog-head p { margin: 5px 0 0; color: var(--muted); }
+
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .quiz-tile {
+      display: flex;
+      flex-direction: column;
+      min-height: 285px;
+      padding: 24px;
+      border: 1px solid rgba(210, 220, 238, .95);
+      border-radius: 22px;
+      background: rgba(255,255,255,.95);
+      box-shadow: 0 14px 38px rgba(25, 42, 93, .09);
+    }
+
+    .quiz-tile.available { border-top: 4px solid var(--aqua); }
+    .quiz-tile.soon { opacity: .68; }
+
+    .tile-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .tile-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      color: white;
+      background: var(--navy);
+      font-size: 1.25rem;
+      font-weight: 900;
+    }
+
+    .tile-status {
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: var(--success);
+      background: var(--aqua-soft);
+      font-size: .75rem;
+      font-weight: 800;
+    }
+
+    .quiz-tile h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.25rem;
+      line-height: 1.3;
+    }
+
+    .quiz-tile p {
+      margin: 10px 0 17px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .tile-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+      margin-bottom: 18px;
+    }
+
+    .tile-meta span {
+      padding: 7px 9px;
+      border-radius: 9px;
+      color: var(--navy-2);
+      background: var(--blue-soft);
+      font-size: .78rem;
+      font-weight: 750;
+    }
+
+    .tile-action { width: 100%; }
+
+    .back-row {
+      display: flex;
+      justify-content: flex-start;
+      margin: 0 0 12px;
+    }
+
+    .back-link {
+      padding: 9px 12px;
+      border: 0;
+      border-radius: 10px;
+      color: var(--navy);
+      background: rgba(255,255,255,.72);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
     @media (max-width: 640px) {
       .shell { width: min(100% - 20px, 940px); padding: 16px 0 28px; }
       .topbar { margin-bottom: 14px; }
@@ -376,6 +540,10 @@
       .actions { align-items: stretch; flex-direction: column; }
       .btn { width: 100%; }
       .option { padding: 14px; }
+      .home-hero { padding: 31px 24px 28px; border-radius: 22px; }
+      .quiz-grid { grid-template-columns: 1fr; }
+      .catalog-head { align-items: flex-start; flex-direction: column; }
+      .quiz-tile { min-height: auto; }
       .watermark {
         position: static;
         max-width: none;
@@ -400,10 +568,59 @@
         <div class="brand-mark" aria-hidden="true">⌁</div>
         <span>Психология · учебный квиз</span>
       </div>
-      <div class="round-pill">Раунд 1 · 5 заданий</div>
+      <div id="topPill" class="round-pill">Выберите квиз</div>
     </header>
 
-    <section class="card" aria-labelledby="page-title">
+    <section id="home" class="home" aria-labelledby="home-title">
+      <div class="home-hero">
+        <p class="eyebrow">Учебная платформа · Психология личности</p>
+        <h1 id="home-title">Интерактивные квизы</h1>
+        <p>Выберите тему и начните прохождение. После каждого задания вы получите пояснение, а в конце — итоговый результат и разбор ответов.</p>
+      </div>
+
+      <div class="catalog-head">
+        <div>
+          <h2>Доступные квизы</h2>
+          <p>Сейчас доступен первый раунд по исследовательской деятельности.</p>
+        </div>
+      </div>
+
+      <div class="quiz-grid">
+        <article class="quiz-tile available">
+          <div class="tile-top">
+            <div class="tile-icon" aria-hidden="true">01</div>
+            <span class="tile-status">Доступен</span>
+          </div>
+          <h3>Введение в исследовательскую деятельность</h3>
+          <p>Научное познание, специфика психологического исследования и основные классификации исследований.</p>
+          <div class="tile-meta">
+            <span>5 заданий</span>
+            <span>≈ 5 минут</span>
+            <span>Раунд 1</span>
+          </div>
+          <button id="startQuizButton" class="btn btn-primary tile-action" type="button">Начать квиз</button>
+        </article>
+
+        <article class="quiz-tile soon" aria-label="Место для следующего квиза">
+          <div class="tile-top">
+            <div class="tile-icon" aria-hidden="true">+</div>
+            <span class="round-pill">Скоро</span>
+          </div>
+          <h3>Следующий квиз</h3>
+          <p>Здесь можно будет добавить следующий раунд или новую тему без изменения структуры главной страницы.</p>
+          <div class="tile-meta">
+            <span>Новая тема</span>
+          </div>
+          <button class="btn btn-secondary tile-action" type="button" disabled>Пока недоступен</button>
+        </article>
+      </div>
+    </section>
+
+    <div id="quizScreen" class="hidden">
+      <div class="back-row">
+        <button id="homeButton" class="back-link" type="button">← К выбору квиза</button>
+      </div>
+      <section class="card" aria-labelledby="page-title">
       <div class="hero">
         <p class="eyebrow">Введение в исследовательскую деятельность</p>
         <h1 id="page-title">Как устроено научное психологическое исследование?</h1>
@@ -442,10 +659,12 @@
         <div id="review" class="review-list"></div>
         <div class="actions">
           <button id="restartButton" class="btn btn-primary" type="button">Пройти ещё раз</button>
+          <button id="resultHomeButton" class="btn btn-secondary" type="button">К выбору квизов</button>
         </div>
       </div>
-    </section>
-    <div class="watermark" role="note">Магистратура РАНХИГС &amp; Психодемия «Психология личности»<br>Группа 226, Герасименко Е.М.</div>
+      </section>
+    </div>
+    <div class="watermark" role="note">Магистратура РАНХиГС «Психология личности»<br>группа МОПЛ-226: Герасименко Е.М., Стецюк Е. В., Быкова А.В.</div>
   </main>
 
   <script>
@@ -455,73 +674,78 @@
       const questions = [
         {
           type: 'Один правильный ответ',
-          text: 'Что наиболее точно отличает научное познание от обыденного?',
+          text: 'Какова основная цель психологического исследования?',
           hint: 'Выберите один вариант.',
           options: [
-            'Научное познание всегда связано только с экспериментом',
-            'Научное познание опирается на систематические методы, проверяемость и обоснованность выводов',
-            'Научное познание полностью исключает теоретические предположения',
-            'Научное познание основывается преимущественно на личном опыте исследователя'
-          ],
-          correct: [1],
-          explanation: 'Научное познание характеризуется системностью, использованием специальных методов, обоснованностью и возможностью проверки выводов.'
-        },
-        {
-          type: 'Несколько правильных ответов',
-          text: 'Какие особенности характерны для научного психологического исследования?',
-          hint: 'Выберите все подходящие варианты.',
-          options: [
-            'Наличие чётко сформулированной исследовательской проблемы',
-            'Использование методов сбора и анализа данных',
-            'Обязательное проведение исследования только в лаборатории',
-            'Соблюдение этических принципов при работе с участниками',
-            'Интерпретация результатов в рамках научной теории'
-          ],
-          correct: [0, 1, 3, 4],
-          explanation: 'Психологическое исследование требует постановки проблемы, обоснованного сбора и анализа данных, соблюдения этики и научной интерпретации. Лабораторные условия не обязательны.'
-        },
-        {
-          type: 'Определите вид исследования',
-          text: 'Исследователь проводит глубинные интервью с 15 участниками, чтобы понять их субъективный опыт профессионального выгорания. К какому типу прежде всего относится исследование?',
-          hint: 'Выберите один вариант.',
-          options: [
-            'Количественное',
-            'Качественное',
-            'Лабораторное экспериментальное',
-            'Фундаментальное математическое'
-          ],
-          correct: [1],
-          explanation: 'Глубинные интервью, направленные на изучение субъективных значений и индивидуального опыта, являются типичным инструментом качественного исследования.'
-        },
-        {
-          type: 'Классификация',
-          text: 'Психолог изучает влияние уровня шума на концентрацию внимания: случайным образом распределяет участников по группам и меняет уровень шума в специально оборудованном помещении. Как лучше классифицировать исследование?',
-          hint: 'Выберите наиболее полный вариант.',
-          options: [
-            'Полевое и теоретическое',
-            'Лабораторное и экспериментальное',
-            'Качественное и проектное',
-            'Только фундаментальное'
-          ],
-          correct: [1],
-          explanation: 'Исследователь изменяет независимую переменную — уровень шума — и контролирует условия. Это эксперимент, проводимый в лабораторной среде.'
-        },
-        {
-          type: 'Применение понятий',
-          text: 'Команда психологов разрабатывает и проверяет программу снижения тревожности у школьников для последующего внедрения в образовательных учреждениях. Какой вид исследования точнее отражает основную направленность?',
-          hint: 'Выберите один вариант.',
-          options: [
-            'Фундаментальное',
-            'Только теоретическое',
-            'Прикладное и проектно-ориентированное',
-            'Исключительно полевое наблюдение'
+            'Наблюдение за поведением людей без объяснения причин происходящего',
+            'Разработка универсальных правил поведения для всех людей',
+            'Установление психологических закономерностей, на основе которых можно объяснять причины поведения, прогнозировать реакции людей в определённых ситуациях, разрабатывать методы коррекции и предупреждать психологические нарушения',
+            'Изучение только индивидуальных особенностей конкретного человека'
           ],
           correct: [2],
-          explanation: 'Работа направлена на решение конкретной практической проблемы и создание применимого продукта — программы вмешательства, поэтому имеет прикладной и проектный характер.'
+          explanation: 'Психологическое исследование направлено на получение объективных научных знаний о закономерностях психики и поведения человека, которые могут использоваться для объяснения, прогнозирования и практического решения психологических задач.'
+        },
+        {
+          type: 'Один правильный ответ',
+          text: 'На каких 3 основных принципах строится научный способ познания?',
+          hint: 'Выберите один вариант.',
+          options: [
+            'Объективности, доказательности и надёжности',
+            'Наблюдательности, практичности и наглядности',
+            'Традиционности, общепринятости и авторитетности',
+            'Субъективности, интуитивности и творческого подхода'
+          ],
+          correct: [0],
+          explanation: 'Научное знание должно быть независимым от личных мнений, подтверждаться фактами и исследованиями, а полученные результаты — быть проверяемыми и надёжными.'
+        },
+        {
+          type: 'Один правильный ответ',
+          text: 'По каким основным критериям классифицируют исследования?',
+          hint: 'Выберите один вариант.',
+          options: [
+            'По месту проведения, количеству участников и используемому оборудованию',
+            'По продолжительности, сложности и стоимости',
+            'По цели, возрасту участников и времени проведения',
+            'По типу знания, по способу получения и по способу предоставления данных'
+          ],
+          correct: [3],
+          explanation: 'Исследования классифицируют по тому, какой тип знания получают, каким способом собирают или получают данные и в каком виде эти данные представляются и анализируются.'
+        },
+        {
+          type: 'Один правильный ответ',
+          text: 'Какие бывают исследования по способу представления полученных данных?',
+          hint: 'Выберите один вариант.',
+          options: [
+            'Теоретические и эмпирические',
+            'Качественные и количественные',
+            'Описательные и экспериментальные',
+            'Лабораторные и полевые'
+          ],
+          correct: [1],
+          explanation: 'Качественные исследования описывают свойства, характеристики, мнения, мотивы и особенности изучаемого явления, а количественные выражают полученные данные в числовой форме, что позволяет их измерять, сравнивать и анализировать статистически.'
+        },
+        {
+          type: 'Один правильный ответ',
+          text: 'Какие основные виды методов выделяют в психологическом исследовании?',
+          hint: 'Выберите один вариант.',
+          options: [
+            'Наблюдательные, разговорные и письменные методы',
+            'Лабораторные, полевые и экспериментальные методы',
+            'Исследовательские, диагностические и коррекционные методы',
+            'Теоретические, практические и бытовые методы'
+          ],
+          correct: [2],
+          explanation: 'Исследовательские методы используются для изучения психологических явлений и выявления закономерностей; диагностические — для оценки и выявления индивидуальных психологических особенностей; коррекционные — для целенаправленного изменения или устранения нежелательных психологических особенностей и состояний.'
         }
       ];
 
       const elements = {
+        home: document.querySelector('#home'),
+        quizScreen: document.querySelector('#quizScreen'),
+        topPill: document.querySelector('#topPill'),
+        startQuiz: document.querySelector('#startQuizButton'),
+        homeButton: document.querySelector('#homeButton'),
+        resultHomeButton: document.querySelector('#resultHomeButton'),
         quiz: document.querySelector('#quiz'),
         result: document.querySelector('#result'),
         progressText: document.querySelector('#progressText'),
@@ -673,6 +897,26 @@
         }
       }
 
+      function showHome() {
+        elements.quizScreen.classList.add('hidden');
+        elements.home.classList.remove('hidden');
+        elements.topPill.textContent = 'Выберите квиз';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function startQuiz() {
+        index = 0;
+        score = 0;
+        attempts = [];
+        elements.result.classList.add('hidden');
+        elements.quiz.classList.remove('hidden');
+        elements.home.classList.add('hidden');
+        elements.quizScreen.classList.remove('hidden');
+        elements.topPill.textContent = 'Раунд 1 · 5 заданий';
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
       function restart() {
         index = 0;
         score = 0;
@@ -686,7 +930,10 @@
       elements.check.addEventListener('click', checkAnswer);
       elements.next.addEventListener('click', nextQuestion);
       elements.restart.addEventListener('click', restart);
-      renderQuestion();
+      elements.startQuiz.addEventListener('click', startQuiz);
+      elements.homeButton.addEventListener('click', showHome);
+      elements.resultHomeButton.addEventListener('click', showHome);
+      showHome();
     })();
   </script>
 </body>
