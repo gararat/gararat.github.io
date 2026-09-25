@@ -1,0 +1,1010 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Интерактивный квиз по теме «Введение в исследовательскую деятельность».">
+  <meta name="theme-color" content="#132968">
+  <title>Квиз · Введение в исследовательскую деятельность</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23132968'/%3E%3Cpath d='M18 17h22a6 6 0 0 1 6 6v24H24a6 6 0 0 1-6-6V17Z' fill='none' stroke='%23fff' stroke-width='5'/%3E%3Cpath d='M25 28h14M25 37h10' stroke='%237ce7d6' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: #15213d;
+      --muted: #66708a;
+      --navy: #132968;
+      --navy-2: #1d3b8d;
+      --aqua: #24b8a7;
+      --aqua-soft: #def7f3;
+      --blue-soft: #edf2ff;
+      --line: #dce3f0;
+      --panel: rgba(255,255,255,.94);
+      --danger: #b53a54;
+      --danger-soft: #fff0f3;
+      --success: #137567;
+      --shadow: 0 24px 70px rgba(25, 42, 93, .15);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(75, 115, 224, .19), transparent 31rem),
+        radial-gradient(circle at 90% 92%, rgba(36, 184, 167, .20), transparent 30rem),
+        #f4f7fc;
+    }
+
+    button, input { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .shell {
+      width: min(940px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 48px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -.02em;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      color: white;
+      background: var(--navy);
+      box-shadow: 0 10px 24px rgba(19, 41, 104, .24);
+    }
+
+    .round-pill {
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255,255,255,.72);
+      font-size: .88rem;
+      font-weight: 700;
+    }
+
+    .card {
+      overflow: hidden;
+      border: 1px solid rgba(210, 220, 238, .9);
+      border-radius: 28px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero {
+      position: relative;
+      padding: 34px 38px 31px;
+      color: white;
+      background: linear-gradient(122deg, var(--navy) 0%, var(--navy-2) 64%, #2158a0 100%);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -72px;
+      top: -102px;
+      width: 250px;
+      height: 250px;
+      border: 38px solid rgba(124, 231, 214, .15);
+      border-radius: 50%;
+    }
+
+    .eyebrow {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 9px;
+      color: #93e9dc;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0;
+      font-size: clamp(1.65rem, 4vw, 2.5rem);
+      line-height: 1.12;
+      letter-spacing: -.035em;
+    }
+
+    .hero p {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 13px 0 0;
+      color: #dfe8ff;
+      line-height: 1.58;
+    }
+
+    .quiz-body { padding: 30px 38px 38px; }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 13px;
+      color: var(--muted);
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .score { color: var(--navy); }
+
+    .timer {
+      color: var(--navy);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .timer.warning { color: var(--danger); }
+
+    .progress {
+      height: 9px;
+      overflow: hidden;
+      margin-bottom: 31px;
+      border-radius: 99px;
+      background: #e7ecf5;
+    }
+
+    .progress > span {
+      display: block;
+      width: 20%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--aqua), #62d4c5);
+      transition: width .35s ease;
+    }
+
+    .question-type {
+      display: inline-flex;
+      margin-bottom: 13px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      color: var(--navy-2);
+      background: var(--blue-soft);
+      font-size: .77rem;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.22rem, 2.6vw, 1.58rem);
+      line-height: 1.38;
+      letter-spacing: -.015em;
+    }
+
+    .hint {
+      margin: 10px 0 20px;
+      color: var(--muted);
+      font-size: .94rem;
+    }
+
+    .answers {
+      display: grid;
+      gap: 11px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    .option {
+      display: grid;
+      grid-template-columns: 25px 1fr;
+      align-items: start;
+      gap: 13px;
+      min-height: 56px;
+      padding: 15px 17px;
+      border: 1.5px solid var(--line);
+      border-radius: 15px;
+      background: white;
+      cursor: pointer;
+      line-height: 1.45;
+      transition: border-color .16s ease, background .16s ease, transform .16s ease, box-shadow .16s ease;
+    }
+
+    .option:hover {
+      transform: translateY(-1px);
+      border-color: #a9b8dd;
+      box-shadow: 0 7px 18px rgba(42, 66, 131, .08);
+    }
+
+    .option:has(input:checked) {
+      border-color: var(--navy-2);
+      background: #f4f7ff;
+      box-shadow: 0 0 0 3px rgba(29, 59, 141, .08);
+    }
+
+    .option input {
+      width: 20px;
+      height: 20px;
+      margin: 1px 0 0;
+      accent-color: var(--navy-2);
+    }
+
+    .option.correct {
+      border-color: var(--success);
+      background: var(--aqua-soft);
+    }
+
+    .option.wrong {
+      border-color: var(--danger);
+      background: var(--danger-soft);
+    }
+
+    .feedback {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-left: 4px solid var(--aqua);
+      border-radius: 11px;
+      background: var(--aqua-soft);
+      line-height: 1.55;
+    }
+
+    .feedback.bad {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+    }
+
+    .feedback strong { display: block; margin-bottom: 4px; }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 23px;
+    }
+
+    .btn {
+      min-height: 48px;
+      padding: 12px 19px;
+      border: 0;
+      border-radius: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:focus-visible, .option:focus-within { outline: 3px solid rgba(36, 184, 167, .32); outline-offset: 2px; }
+
+    .btn-primary {
+      color: white;
+      background: var(--navy);
+      box-shadow: 0 9px 20px rgba(19, 41, 104, .22);
+    }
+
+    .btn-secondary {
+      color: var(--navy);
+      background: var(--blue-soft);
+    }
+
+    .notice {
+      min-height: 24px;
+      color: var(--danger);
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    .result { padding: 34px 38px 40px; }
+    .result h2 { font-size: clamp(1.65rem, 4vw, 2.25rem); }
+    .result-lead { color: var(--muted); line-height: 1.55; }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 13px;
+      margin: 26px 0;
+    }
+
+    .metric {
+      padding: 19px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #f8faff;
+    }
+
+    .metric span { display: block; color: var(--muted); font-size: .84rem; font-weight: 700; }
+    .metric strong { display: block; margin-top: 5px; color: var(--navy); font-size: 1.55rem; }
+
+    .review-title { margin: 30px 0 14px; font-size: 1.18rem; }
+    .review-list { display: grid; gap: 10px; }
+
+    .review-item {
+      padding: 15px 17px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: white;
+      line-height: 1.45;
+    }
+
+    .review-item strong { color: var(--navy); }
+    .review-item p { margin: 7px 0 0; color: var(--muted); font-size: .92rem; }
+    .review-item.ok { border-left: 4px solid var(--aqua); }
+    .review-item.miss { border-left: 4px solid var(--danger); }
+
+    .hidden { display: none !important; }
+
+    .watermark {
+      position: fixed;
+      z-index: 20;
+      right: 22px;
+      bottom: 18px;
+      max-width: min(430px, calc(100vw - 32px));
+      padding: 10px 14px;
+      border: 1px solid rgba(19, 41, 104, .14);
+      border-radius: 12px;
+      color: rgba(19, 41, 104, .66);
+      background: rgba(255, 255, 255, .78);
+      box-shadow: 0 8px 24px rgba(19, 41, 104, .08);
+      backdrop-filter: blur(8px);
+      font-size: .76rem;
+      font-weight: 700;
+      line-height: 1.42;
+      text-align: right;
+      pointer-events: none;
+      user-select: none;
+    }
+
+
+    .home {
+      display: grid;
+      gap: 22px;
+    }
+
+    .home-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 42px 42px 38px;
+      border-radius: 30px;
+      color: white;
+      background: linear-gradient(122deg, var(--navy) 0%, var(--navy-2) 62%, #2158a0 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .home-hero::before,
+    .home-hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .home-hero::before {
+      width: 260px;
+      height: 260px;
+      right: -80px;
+      top: -105px;
+      border: 42px solid rgba(124, 231, 214, .14);
+    }
+
+    .home-hero::after {
+      width: 150px;
+      height: 150px;
+      left: -65px;
+      bottom: -85px;
+      background: rgba(124, 231, 214, .08);
+    }
+
+    .home-hero > * { position: relative; z-index: 1; }
+
+    .home-hero h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(1.9rem, 4.5vw, 3rem);
+      line-height: 1.08;
+    }
+
+    .home-hero p {
+      max-width: 700px;
+      margin: 15px 0 0;
+      color: #dfe8ff;
+      line-height: 1.62;
+    }
+
+    .catalog-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-top: 6px;
+    }
+
+    .catalog-head h2 { margin: 0; }
+    .catalog-head p { margin: 5px 0 0; color: var(--muted); }
+
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .quiz-tile {
+      display: flex;
+      flex-direction: column;
+      min-height: 285px;
+      padding: 24px;
+      border: 1px solid rgba(210, 220, 238, .95);
+      border-radius: 22px;
+      background: rgba(255,255,255,.95);
+      box-shadow: 0 14px 38px rgba(25, 42, 93, .09);
+    }
+
+    .quiz-tile.available { border-top: 4px solid var(--aqua); }
+    .quiz-tile.soon { opacity: .68; }
+
+    .tile-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .tile-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      color: white;
+      background: var(--navy);
+      font-size: 1.25rem;
+      font-weight: 900;
+    }
+
+    .tile-status {
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: var(--success);
+      background: var(--aqua-soft);
+      font-size: .75rem;
+      font-weight: 800;
+    }
+
+    .quiz-tile h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.25rem;
+      line-height: 1.3;
+    }
+
+    .quiz-tile p {
+      margin: 10px 0 17px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .tile-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+      margin-bottom: 18px;
+    }
+
+    .tile-meta span {
+      padding: 7px 9px;
+      border-radius: 9px;
+      color: var(--navy-2);
+      background: var(--blue-soft);
+      font-size: .78rem;
+      font-weight: 750;
+    }
+
+    .tile-action { width: 100%; }
+
+    .back-row {
+      display: flex;
+      justify-content: flex-start;
+      margin: 0 0 12px;
+    }
+
+    .back-link {
+      padding: 9px 12px;
+      border: 0;
+      border-radius: 10px;
+      color: var(--navy);
+      background: rgba(255,255,255,.72);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    @media (max-width: 640px) {
+      .shell { width: min(100% - 20px, 940px); padding: 16px 0 28px; }
+      .topbar { margin-bottom: 14px; }
+      .brand span:last-child { display: none; }
+      .card { border-radius: 21px; }
+      .hero { padding: 27px 22px 25px; }
+      .quiz-body, .result { padding: 25px 20px 28px; }
+      .result-grid { grid-template-columns: 1fr; }
+      .actions { align-items: stretch; flex-direction: column; }
+      .btn { width: 100%; }
+      .option { padding: 14px; }
+      .home-hero { padding: 31px 24px 28px; border-radius: 22px; }
+      .quiz-grid { grid-template-columns: 1fr; }
+      .catalog-head { align-items: flex-start; flex-direction: column; }
+      .quiz-tile { min-height: auto; }
+      .watermark {
+        position: static;
+        max-width: none;
+        margin: 14px 4px 0;
+        padding: 8px 5px;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        text-align: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">⌁</div>
+        <span>Психология · учебный квиз</span>
+      </div>
+      <div id="topPill" class="round-pill">Выберите квиз</div>
+    </header>
+
+    <section id="home" class="home" aria-labelledby="home-title">
+      <div class="home-hero">
+        <p class="eyebrow">Учебная платформа · Психология личности</p>
+        <h1 id="home-title">Интерактивные квизы</h1>
+        <p>Выберите тему и начните прохождение. После каждого задания вы получите пояснение, а в конце — итоговый результат и разбор ответов.</p>
+      </div>
+
+      <div class="catalog-head">
+        <div>
+          <h2>Доступные квизы</h2>
+          <p>Сейчас доступен первый раунд по исследовательской деятельности.</p>
+        </div>
+      </div>
+
+      <div class="quiz-grid">
+        <article class="quiz-tile available">
+          <div class="tile-top">
+            <div class="tile-icon" aria-hidden="true">01</div>
+            <span class="tile-status">Доступен</span>
+          </div>
+          <h3>Введение в исследовательскую деятельность</h3>
+          <p>Научное познание, специфика психологического исследования и основные классификации исследований.</p>
+          <div class="tile-meta">
+            <span>5 заданий</span>
+            <span>≈ 5 минут</span>
+            <span>Раунд 1</span>
+          </div>
+          <button id="startQuizButton" class="btn btn-primary tile-action" type="button">Начать квиз</button>
+        </article>
+
+        <article class="quiz-tile soon" aria-label="Место для следующего квиза">
+          <div class="tile-top">
+            <div class="tile-icon" aria-hidden="true">+</div>
+            <span class="round-pill">Скоро</span>
+          </div>
+          <h3>Следующий квиз</h3>
+          <p>Здесь можно будет добавить следующий раунд или новую тему без изменения структуры главной страницы.</p>
+          <div class="tile-meta">
+            <span>Новая тема</span>
+          </div>
+          <button class="btn btn-secondary tile-action" type="button" disabled>Пока недоступен</button>
+        </article>
+      </div>
+    </section>
+
+    <div id="quizScreen" class="hidden">
+      <div class="back-row">
+        <button id="homeButton" class="back-link" type="button">← К выбору квиза</button>
+      </div>
+      <section class="card" aria-labelledby="page-title">
+      <div class="hero">
+        <p class="eyebrow">Введение в исследовательскую деятельность</p>
+        <h1 id="page-title">Как устроено научное психологическое исследование?</h1>
+        <p>Проверьте понимание научного познания и основных классификаций исследований. На прохождение потребуется около 5 минут.</p>
+      </div>
+
+      <div id="quiz" class="quiz-body">
+        <div class="status-row">
+          <span id="progressText">Задание 1 из 5</span>
+          <span id="timer" class="timer" aria-live="off">Время: 5:00</span>
+          <span class="score">Баллы: <span id="score">0</span>/5</span>
+        </div>
+        <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+        <div id="questionType" class="question-type"></div>
+        <h2 id="questionText"></h2>
+        <p id="questionHint" class="hint"></p>
+        <fieldset id="answers" class="answers" aria-describedby="questionHint notice"></fieldset>
+        <div id="notice" class="notice" role="alert" aria-live="polite"></div>
+        <div id="feedback" class="feedback hidden" aria-live="polite"></div>
+        <div class="actions">
+          <button id="checkButton" class="btn btn-primary" type="button">Проверить ответ</button>
+          <button id="nextButton" class="btn btn-secondary hidden" type="button">Следующее задание</button>
+        </div>
+      </div>
+
+      <div id="result" class="result hidden" aria-live="polite">
+        <p class="eyebrow" style="color:var(--aqua)">Раунд завершён</p>
+        <h2 id="resultHeading" tabindex="-1">Ваш результат</h2>
+        <p id="resultLead" class="result-lead"></p>
+        <div class="result-grid">
+          <div class="metric"><span>Правильных</span><strong id="finalScore"></strong></div>
+          <div class="metric"><span>Результат</span><strong id="finalPercent"></strong></div>
+          <div class="metric"><span>Уровень</span><strong id="finalLevel"></strong></div>
+        </div>
+        <h3 class="review-title">Разбор ответов</h3>
+        <div id="review" class="review-list"></div>
+        <div class="actions">
+          <button id="restartButton" class="btn btn-primary" type="button">Пройти ещё раз</button>
+          <button id="resultHomeButton" class="btn btn-secondary" type="button">К выбору квизов</button>
+        </div>
+      </div>
+      </section>
+    </div>
+    <div class="watermark" role="note">Магистратура РАНХиГС «Психология личности», МОПЛ-226:<br>Герасименко Е.М., Стецюк Е. В., Бажина И.С.,<br>Деденева Е.Н., Быкова А.В., Лунева Н.А.</div>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const questions = [
+        {
+          type: 'Один правильный ответ',
+          text: 'Какова основная цель психологического исследования?',
+          hint: 'Выберите один вариант.',
+          options: [
+            'Наблюдение за поведением людей без объяснения причин происходящего',
+            'Разработка универсальных правил поведения для всех людей',
+            'Установление психологических закономерностей, на основе которых можно объяснять причины поведения, прогнозировать реакции людей в определённых ситуациях, разрабатывать методы коррекции и предупреждать психологические нарушения',
+            'Изучение только индивидуальных особенностей конкретного человека'
+          ],
+          correct: [2],
+          explanation: 'Психологическое исследование направлено на получение объективных научных знаний о закономерностях психики и поведения человека, которые могут использоваться для объяснения, прогнозирования и практического решения психологических задач.'
+        },
+        {
+          type: 'Один правильный ответ',
+          text: 'На каких 3 основных принципах строится научный способ познания?',
+          hint: 'Выберите один вариант.',
+          options: [
+            'Объективности, доказательности и надёжности',
+            'Наблюдательности, практичности и наглядности',
+            'Традиционности, общепринятости и авторитетности',
+            'Субъективности, интуитивности и творческого подхода'
+          ],
+          correct: [0],
+          explanation: 'Научное знание должно быть независимым от личных мнений, подтверждаться фактами и исследованиями, а полученные результаты — быть проверяемыми и надёжными.'
+        },
+        {
+          type: 'Один правильный ответ',
+          text: 'По каким основным критериям классифицируют исследования?',
+          hint: 'Выберите один вариант.',
+          options: [
+            'По месту проведения, количеству участников и используемому оборудованию',
+            'По продолжительности, сложности и стоимости',
+            'По цели, возрасту участников и времени проведения',
+            'По типу знания, по способу получения и по способу представления данных'
+          ],
+          correct: [3],
+          explanation: 'Исследования классифицируют по тому, какой тип знания получают, каким способом собирают или получают данные и в каком виде эти данные представляются и анализируются.'
+        },
+        {
+          type: 'Один правильный ответ',
+          text: 'Какие бывают исследования по способу представления полученных данных?',
+          hint: 'Выберите один вариант.',
+          options: [
+            'Теоретические и эмпирические',
+            'Качественные и количественные',
+            'Описательные и экспериментальные',
+            'Лабораторные и полевые'
+          ],
+          correct: [1],
+          explanation: 'Качественные исследования описывают свойства, характеристики, мнения, мотивы и особенности изучаемого явления, а количественные выражают полученные данные в числовой форме, что позволяет их измерять, сравнивать и анализировать статистически.'
+        },
+        {
+          type: 'Один правильный ответ',
+          text: 'Какие основные виды методов выделяют в психологическом исследовании?',
+          hint: 'Выберите один вариант.',
+          options: [
+            'Наблюдательные, разговорные и письменные методы',
+            'Лабораторные, полевые и экспериментальные методы',
+            'Исследовательские, диагностические и коррекционные методы',
+            'Теоретические, практические и бытовые методы'
+          ],
+          correct: [2],
+          explanation: 'Исследовательские методы используются для изучения психологических явлений и выявления закономерностей; диагностические — для оценки и выявления индивидуальных психологических особенностей; коррекционные — для целенаправленного изменения или устранения нежелательных психологических особенностей и состояний.'
+        }
+      ];
+
+      const elements = {
+        home: document.querySelector('#home'),
+        quizScreen: document.querySelector('#quizScreen'),
+        topPill: document.querySelector('#topPill'),
+        startQuiz: document.querySelector('#startQuizButton'),
+        homeButton: document.querySelector('#homeButton'),
+        resultHomeButton: document.querySelector('#resultHomeButton'),
+        quiz: document.querySelector('#quiz'),
+        result: document.querySelector('#result'),
+        progressText: document.querySelector('#progressText'),
+        progressBar: document.querySelector('#progressBar'),
+        score: document.querySelector('#score'),
+        timer: document.querySelector('#timer'),
+        questionType: document.querySelector('#questionType'),
+        questionText: document.querySelector('#questionText'),
+        questionHint: document.querySelector('#questionHint'),
+        answers: document.querySelector('#answers'),
+        notice: document.querySelector('#notice'),
+        feedback: document.querySelector('#feedback'),
+        check: document.querySelector('#checkButton'),
+        next: document.querySelector('#nextButton'),
+        restart: document.querySelector('#restartButton'),
+        finalScore: document.querySelector('#finalScore'),
+        finalPercent: document.querySelector('#finalPercent'),
+        finalLevel: document.querySelector('#finalLevel'),
+        resultLead: document.querySelector('#resultLead'),
+        resultHeading: document.querySelector('#resultHeading'),
+        review: document.querySelector('#review')
+      };
+
+      let index = 0;
+      let score = 0;
+      let locked = false;
+      let attempts = [];
+      const QUIZ_DURATION_MS = 5 * 60 * 1000;
+      let timerId = null;
+      let quizDeadline = null;
+
+      function stopTimer() {
+        if (timerId !== null) {
+          clearInterval(timerId);
+          timerId = null;
+        }
+        quizDeadline = null;
+      }
+
+      function updateTimer() {
+        if (!quizDeadline) return;
+        const remaining = Math.max(0, quizDeadline - Date.now());
+        const totalSeconds = Math.ceil(remaining / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        elements.timer.textContent = `Время: ${minutes}:${String(seconds).padStart(2, '0')}`;
+        elements.timer.classList.toggle('warning', remaining <= 60 * 1000);
+
+        if (remaining <= 0) {
+          finishQuizByTimeout();
+        }
+      }
+
+      function startTimer() {
+        stopTimer();
+        quizDeadline = Date.now() + QUIZ_DURATION_MS;
+        elements.timer.classList.remove('warning');
+        updateTimer();
+        timerId = setInterval(updateTimer, 250);
+      }
+
+      function finishQuizByTimeout() {
+        if (!quizDeadline) return;
+        stopTimer();
+
+        if (!locked && index < questions.length) {
+          const question = questions[index];
+          const selected = selectedAnswers();
+          const isCorrect = selected.length > 0 && equalSets(selected, question.correct);
+          if (isCorrect) score += 1;
+          attempts[index] = { selected, isCorrect, timedOut: selected.length === 0 };
+        }
+
+        for (let questionIndex = 0; questionIndex < questions.length; questionIndex += 1) {
+          if (!attempts[questionIndex]) {
+            attempts[questionIndex] = { selected: [], isCorrect: false, timedOut: true };
+          }
+        }
+
+        showResult(true);
+      }
+
+      const equalSets = (a, b) => a.length === b.length && a.every(value => b.includes(value));
+
+      function renderQuestion() {
+        const question = questions[index];
+        locked = false;
+        elements.progressText.textContent = `Задание ${index + 1} из ${questions.length}`;
+        elements.progressBar.style.width = `${((index + 1) / questions.length) * 100}%`;
+        elements.score.textContent = score;
+        elements.questionType.textContent = question.type;
+        elements.questionText.textContent = question.text;
+        elements.questionHint.textContent = question.hint;
+        elements.answers.replaceChildren();
+        elements.notice.textContent = '';
+        elements.feedback.className = 'feedback hidden';
+        elements.feedback.replaceChildren();
+        elements.check.classList.remove('hidden');
+        elements.next.classList.add('hidden');
+
+        const multiple = question.correct.length > 1;
+        question.options.forEach((optionText, optionIndex) => {
+          const label = document.createElement('label');
+          label.className = 'option';
+
+          const input = document.createElement('input');
+          input.type = multiple ? 'checkbox' : 'radio';
+          input.name = 'answer';
+          input.value = optionIndex;
+
+          const text = document.createElement('span');
+          text.textContent = optionText;
+          label.append(input, text);
+          elements.answers.append(label);
+        });
+      }
+
+      function selectedAnswers() {
+        return [...elements.answers.querySelectorAll('input:checked')].map(input => Number(input.value));
+      }
+
+      function showFeedback(isCorrect, question) {
+        const heading = document.createElement('strong');
+        heading.textContent = isCorrect ? 'Верно.' : 'Неверно.';
+        const text = document.createElement('span');
+        text.textContent = question.explanation;
+        elements.feedback.append(heading, text);
+        elements.feedback.className = `feedback${isCorrect ? '' : ' bad'}`;
+      }
+
+      function checkAnswer() {
+        if (locked) return;
+        const selected = selectedAnswers();
+        if (!selected.length) {
+          elements.notice.textContent = 'Сначала выберите ответ.';
+          return;
+        }
+
+        locked = true;
+        elements.notice.textContent = '';
+        const question = questions[index];
+        const isCorrect = equalSets(selected, question.correct);
+        if (isCorrect) score += 1;
+        attempts[index] = { selected, isCorrect, timedOut: false };
+        elements.score.textContent = score;
+
+        [...elements.answers.querySelectorAll('.option')].forEach((label, optionIndex) => {
+          const input = label.querySelector('input');
+          input.disabled = true;
+          if (question.correct.includes(optionIndex)) label.classList.add('correct');
+          else if (input.checked) label.classList.add('wrong');
+        });
+
+        showFeedback(isCorrect, question);
+        elements.check.classList.add('hidden');
+        elements.next.textContent = index === questions.length - 1 ? 'Показать результат' : 'Следующее задание';
+        elements.next.classList.remove('hidden');
+        elements.next.focus();
+      }
+
+      function resultCopy(value) {
+        if (value === 5) return { level: 'Отлично', lead: 'Вы уверенно различаете основные виды исследований и понимаете специфику научного психологического исследования.' };
+        if (value === 4) return { level: 'Хорошо', lead: 'Основные понятия усвоены. Полезно ещё раз повторить критерии классификации исследований.' };
+        if (value === 3) return { level: 'Базовый', lead: 'Общее понимание есть, но некоторые виды исследований и критерии их различения требуют повторения.' };
+        return { level: 'Повторить тему', lead: 'Повторите признаки научного познания и различия между основными видами психологических исследований.' };
+      }
+
+      function showResult(timedOut = false) {
+        stopTimer();
+        const percent = Math.round((score / questions.length) * 100);
+        const copy = resultCopy(score);
+        elements.finalScore.textContent = `${score}/${questions.length}`;
+        elements.finalPercent.textContent = `${percent}%`;
+        elements.finalLevel.textContent = copy.level;
+        elements.resultLead.textContent = timedOut
+          ? `Время истекло. ${copy.lead}`
+          : copy.lead;
+        elements.review.replaceChildren();
+
+        questions.forEach((question, questionIndex) => {
+          const attempt = attempts[questionIndex];
+          const item = document.createElement('div');
+          item.className = `review-item ${attempt.isCorrect ? 'ok' : 'miss'}`;
+          const heading = document.createElement('strong');
+          heading.textContent = `${questionIndex + 1}. ${attempt.isCorrect ? 'Верно' : 'Ошибка'}`;
+          const detail = document.createElement('p');
+          detail.textContent = attempt.isCorrect
+            ? question.explanation
+            : `${attempt.selected.length === 0 ? 'Ответ не дан. ' : ''}Правильный ответ: ${question.correct.map(answerIndex => question.options[answerIndex]).join('; ')}. ${question.explanation}`;
+          item.append(heading, detail);
+          elements.review.append(item);
+        });
+
+        elements.quiz.classList.add('hidden');
+        elements.result.classList.remove('hidden');
+        elements.resultHeading.focus();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function nextQuestion() {
+        if (index < questions.length - 1) {
+          index += 1;
+          renderQuestion();
+          elements.questionText.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          showResult();
+        }
+      }
+
+      function showHome() {
+        stopTimer();
+        elements.quizScreen.classList.add('hidden');
+        elements.home.classList.remove('hidden');
+        elements.topPill.textContent = 'Выберите квиз';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function startQuiz() {
+        index = 0;
+        score = 0;
+        attempts = [];
+        elements.result.classList.add('hidden');
+        elements.quiz.classList.remove('hidden');
+        elements.home.classList.add('hidden');
+        elements.quizScreen.classList.remove('hidden');
+        elements.topPill.textContent = 'Раунд 1 · 5 заданий';
+        renderQuestion();
+        startTimer();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function restart() {
+        index = 0;
+        score = 0;
+        attempts = [];
+        elements.result.classList.add('hidden');
+        elements.quiz.classList.remove('hidden');
+        renderQuestion();
+        startTimer();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      elements.check.addEventListener('click', checkAnswer);
+      elements.next.addEventListener('click', nextQuestion);
+      elements.restart.addEventListener('click', restart);
+      elements.startQuiz.addEventListener('click', startQuiz);
+      elements.homeButton.addEventListener('click', showHome);
+      elements.resultHomeButton.addEventListener('click', showHome);
+      showHome();
+    })();
+  </script>
+</body>
+</html>
